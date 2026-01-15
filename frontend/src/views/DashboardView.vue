@@ -42,10 +42,16 @@
               <button @click.stop="selectDate(day)" class="btn-select-date" title="Select for Registration">📍</button>
             </div>
             <div class="day-data">
-              <div v-if="getDayDailyBalance(day) !== 0" 
-                :class="getDayDailyBalance(day) > 0 ? 'tiny-plus' : 'tiny-minus'"
+              <div v-if="getDayCategoryTotal(day, 'C') !== 0" 
+                :class="getDayCategoryTotal(day, 'C') > 0 ? 'tiny-plus' : 'tiny-minus'"
               >
-                {{ getDayDailyBalance(day) > 0 ? '+' : '-' }}{{ formatShort(Math.abs(getDayDailyBalance(day))) }}
+                C: {{ getDayCategoryTotal(day, 'C') > 0 ? '+' : '-' }}{{ formatShort(Math.abs(getDayCategoryTotal(day, 'C'))) }}
+              </div>
+              <div v-if="getDayCategoryTotal(day, 'S') !== 0" 
+                :class="getDayCategoryTotal(day, 'S') > 0 ? 'tiny-plus' : 'tiny-minus'"
+                style="margin-top: 2px; border: 1px dashed rgba(255,255,255,0.1)"
+              >
+                S: {{ getDayCategoryTotal(day, 'S') > 0 ? '+' : '-' }}{{ formatShort(Math.abs(getDayCategoryTotal(day, 'S'))) }}
               </div>
             </div>
           </div>
@@ -210,10 +216,10 @@ const handleRegistration = async () => {
   }
 }
 
-const getDayDailyBalance = (day) => {
+const getDayCategoryTotal = (day, category) => {
   const dateStr = currentDate.value.date(day).format('YYYY-MM-DD')
   return transactions.value
-    .filter(t => dayjs(t.date).format('YYYY-MM-DD') === dateStr)
+    .filter(t => dayjs(t.date).format('YYYY-MM-DD') === dateStr && t.category === category)
     .reduce((sum, t) => {
       const val = (Number(t.amountValue) || 0)
       return t.type === 'plus' ? sum + val : sum - val
