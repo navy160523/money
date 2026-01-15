@@ -415,7 +415,8 @@ const totalExpense = computed(() => {
 
 .day-number {
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #3b82f6; /* Bright Blue */
 }
 
 .day-data {
@@ -426,19 +427,23 @@ const totalExpense = computed(() => {
 }
 
 .tiny-plus {
-  font-size: 0.7rem;
-  color: var(--income);
-  background: rgba(52, 211, 153, 0.1);
-  padding: 2px 4px;
-  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #059669; /* Darker Green for visibility */
+  background: rgba(16, 185, 129, 0.15);
+  padding: 3px 6px;
+  border-radius: 6px;
+  text-align: center;
 }
 
 .tiny-minus {
-  font-size: 0.7rem;
-  color: var(--expense);
-  background: rgba(251, 113, 133, 0.1);
-  padding: 2px 4px;
-  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #dc2626; /* Darker Red for visibility */
+  background: rgba(239, 68, 68, 0.15);
+  padding: 3px 6px;
+  border-radius: 6px;
+  text-align: center;
 }
 
 .quick-add {
