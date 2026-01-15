@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Premium Dark Theme */
+  --primary: #818cf8;
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --secondary: #c084fc;
+  --accent: #fb7185;
+  --income: #34d399;
+  --expense: #fb7185;
+
+  --bg-dark: #020617;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0, transparent 50%);
+
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+  --bg-dark: #f1f5f9;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.1) 0, transparent 50%);
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --glass: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.4s, border-color 0.4s, color 0.4s;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-dark);
+  background-image: var(--bg-mesh);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-premium);
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+}
+
+.input-field {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: var(--text-main);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+  color-scheme: dark;
+}
+
+[data-theme="light"] .input-field {
+  background: rgba(255, 255, 255, 0.4);
+  color-scheme: light;
+}
+
+.input-field:focus {
+  border-color: var(--primary);
+}
+
+/* Direct Calendar Icon Fix for Dark Mode */
+.input-field[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+[data-theme="light"] .input-field[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+  opacity: 1;
+}
+
+/* Radio Group Premium Styling */
+.radio-group {
+  display: flex;
+  gap: 12px;
+  background: var(--glass);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  width: fit-content;
+}
+
+.radio-label {
+  cursor: pointer;
+  position: relative;
+}
+
+.radio-label input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-chip {
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition);
+  text-align: center;
+  min-width: 60px;
+}
+
+.radio-label input[type="radio"]:checked+.radio-chip {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.radio-label input[type="radio"]:checked+.radio-chip.plus {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+.radio-label input[type="radio"]:checked+.radio-chip.minus {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+  box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
+}
+
+.radio-label:hover .radio-chip {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.radio-label input[type="radio"]:checked:hover .radio-chip {
+  background: var(--primary-gradient);
+  opacity: 0.9;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
