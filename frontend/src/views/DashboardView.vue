@@ -82,12 +82,12 @@
             <label>Category (C/S)</label>
             <div class="radio-group">
               <label class="radio-label">
-                <input type="radio" v-model="quickForm.category" value="C" />
-                <span class="radio-chip">C</span>
-              </label>
-              <label class="radio-label">
                 <input type="radio" v-model="quickForm.category" value="S" />
                 <span class="radio-chip">S</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" v-model="quickForm.category" value="C" />
+                <span class="radio-chip">C</span>
               </label>
             </div>
           </div>
@@ -176,8 +176,7 @@ const goToDetail = (day) => {
 
 const formatMoney = (val) => new Intl.NumberFormat('ko-KR').format(val)
 const formatShort = (val) => {
-  if (val >= 1000000) return (val/1000000).toFixed(1) + 'M'
-  if (val >= 1000) return (val/1000).toFixed(1) + 'K'
+  if (val >= 10000) return Math.floor(val / 10000) + '만'
   return val
 }
 
@@ -209,7 +208,7 @@ const handleRegistration = async () => {
     await addDoc(collection(db, 'transactions'), newTx)
     await fetchTransactions()
     quickForm.value.amount = 0
-    quickForm.value.category = 'C'
+    quickForm.value.category = 'S'
     
     Swal.fire({
       icon: 'success',
