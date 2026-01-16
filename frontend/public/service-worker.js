@@ -68,12 +68,18 @@ self.addEventListener('fetch', event => {
     // Handle other requests with cache-first strategy
     event.respondWith(
       caches.match(request).then(cachedResponse => {
-        return cachedResponse || fetch(request)
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(request)
           .then(response => {
-            if (response.ok) {
-              const cache = caches.open(CACHE_NAME);
-              cache.then(c => c.put(request, response.clone()));
+            if (!response || response.status !== 200) {
+              return response;
             }
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(request, responseToCache);
+            });
             return response;
           })
           .catch(() => {
