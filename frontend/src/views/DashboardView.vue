@@ -54,6 +54,11 @@
                 S: {{ getDayCategoryTotal(day, 'S') > 0 ? '+' : '-' }}{{ formatShort(Math.abs(getDayCategoryTotal(day, 'S'))) }}
               </div>
             </div>
+            <div class="day-data-total" v-if="getDayTotal(day) !== 0"
+              :class="getDayTotal(day) > 0 ? 'tiny-plus' : 'tiny-minus'"
+            >
+              {{ getDayTotal(day) > 0 ? '+' : '-' }}{{ formatShort(Math.abs(getDayTotal(day))) }}
+            </div>
           </div>
         </div>
       </div>
@@ -227,6 +232,16 @@ const getDayCategoryTotal = (day, category) => {
   const dateStr = currentDate.value.date(day).format('YYYY-MM-DD')
   return transactions.value
     .filter(t => dayjs(t.date).format('YYYY-MM-DD') === dateStr && t.category === category)
+    .reduce((sum, t) => {
+      const val = (Number(t.amountValue) || 0)
+      return t.type === 'plus' ? sum + val : sum - val
+    }, 0)
+}
+
+const getDayTotal = (day) => {
+  const dateStr = currentDate.value.date(day).format('YYYY-MM-DD')
+  return transactions.value
+    .filter(t => dayjs(t.date).format('YYYY-MM-DD') === dateStr)
     .reduce((sum, t) => {
       const val = (Number(t.amountValue) || 0)
       return t.type === 'plus' ? sum + val : sum - val
@@ -558,6 +573,13 @@ const totalExpense = computed(() => {
   .day-data {
     margin-top: 4px;
     gap: 2px;
+    display: none;
+  }
+  .day-data-total {
+    margin-top: 4px;
+    display: flex;
+    font-size: 0.62rem;
+    padding: 2px 3px;
   }
   .tiny-plus, .tiny-minus {
     font-size: 0.62rem;
