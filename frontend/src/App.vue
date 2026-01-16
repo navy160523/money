@@ -6,15 +6,20 @@
         <span class="logo-icon">💰</span>
         <span class="logo-text">Money</span>
       </div>
-      <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="menu-toggle">
-        {{ isMobileMenuOpen ? '✕' : '☰' }}
-      </button>
+      <div class="header-buttons">
+        <button @click="handleLock" class="btn-lock-mobile">
+          🔒
+        </button>
+        <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="menu-toggle">
+          {{ isMobileMenuOpen ? '✕' : '☰' }}
+        </button>
+      </div>
     </header>
 
     <!-- Sidebar Overlay -->
     <div v-if="isMobileMenuOpen" @click="isMobileMenuOpen = false" class="sidebar-overlay"></div>
 
-    <nav v-if="!isLocked" class="sidebar glass-card" :class="{ 'mobile-open': isMobileMenuOpen }">
+    <nav v-if="!isLocked && isSidebarOpen" class="sidebar glass-card" :class="{ 'mobile-open': isMobileMenuOpen }">
       <div class="sidebar-top">
         <div class="logo">
           <span class="logo-icon">💰</span>
@@ -35,14 +40,18 @@
           📜 Transactions
         </router-link>
       </div>
-      <div class="user-section">
-        <button @click="handleLock" class="btn-lock">
-          🔒 Lock Screen
-        </button>
-      </div>
+      <button @click="handleLock" class="btn-lock" title="Lock">
+        🔒 Lock
+      </button>
     </nav>
-    <main class="main-content" :class="{ 'full-width': isLocked }">
-      <router-view />
+
+    <!-- Sidebar Toggle Button -->
+    <button v-if="!isLocked" @click="toggleSidebar" class="sidebar-toggle" :title="isSidebarOpen ? 'Hide Menu' : 'Show Menu'">
+      {{ isSidebarOpen ? '◀' : '▶' }}
+    </button>
+
+    <main class="main-content" :class="{ 'full-width': isLocked, 'sidebar-collapsed': !isSidebarOpen, 'sidebar-collapsed': !isSidebarOpen }">
+      <router-view :handleLock="handleLock" />
     </main>
   </div>
 </template>
@@ -55,6 +64,7 @@ const route = useRoute()
 const router = useRouter()
 const isDark = ref(false)
 const isMobileMenuOpen = ref(false)
+const isSidebarOpen = ref(true)
 
 // Set initial theme to light
 document.documentElement.setAttribute('data-theme', 'light')
@@ -62,6 +72,10 @@ document.documentElement.setAttribute('data-theme', 'light')
 const toggleTheme = () => {
   isDark.value = !isDark.value
   document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
+}
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value
 }
 
 const isLocked = ref(sessionStorage.getItem('isLocked') !== 'false')
@@ -106,6 +120,28 @@ const handleLock = () => {
   color: var(--text-main);
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-lock-mobile {
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  display: none;
+}
+
+.btn-lock-mobile:hover {
+  background: rgba(244, 63, 94, 0.3);
 }
 
 .sidebar-overlay {
@@ -154,6 +190,30 @@ const handleLock = () => {
 .main-content.full-width {
   margin-left: 0;
   padding: 0;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 0;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  padding: 12px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 140;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Breakpoint 1: 1080px (Desktop Large) */
@@ -217,6 +277,9 @@ const handleLock = () => {
   .mobile-header {
     height: 60px;
     padding: 0 15px;
+  }
+  .btn-lock-mobile {
+    display: block;
   }
   .main-content {
     padding: 75px 12px 12px 12px;
@@ -297,10 +360,17 @@ const handleLock = () => {
   width: 100%;
   border-radius: 12px;
   transition: background 0.3s;
+  margin-top: auto;
 }
 
 .btn-lock:hover {
   background: rgba(244, 63, 94, 0.1);
   color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .btn-lock {
+    display: none;
+  }
 }
 </style>

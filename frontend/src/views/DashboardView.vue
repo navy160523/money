@@ -1,17 +1,13 @@
 <template>
   <div class="dashboard-view animate-fade-in">
     <header class="view-header">
-      <div>
-        <h1>Dashboard</h1>
-        <p class="date-info">{{ kstTime }} (KST)</p>
-      </div>
       <div class="stats-row">
         <div class="stat-card glass-card">
-          <span class="label">This Month Income</span>
+          <span class="label">+ Income</span>
           <span class="value text-primary">+{{ formatMoney(totalIncome) }}</span>
         </div>
         <div class="stat-card glass-card">
-          <span class="label">This Month Expense</span>
+          <span class="label">- Expense</span>
           <span class="value text-accent">-{{ formatMoney(totalExpense) }}</span>
         </div>
       </div>
@@ -65,7 +61,7 @@
 
       <div class="side-panel">
         <div class="quick-add glass-card">
-          <h3>Quick Registration</h3>
+          <h3>등록</h3>
           <div class="form-group">
             <label>Type</label>
             <div class="radio-group">
@@ -100,7 +96,7 @@
             <label>Date</label>
             <input type="date" v-model="quickForm.date" class="input-field" />
           </div>
-          <button @click="handleRegistration" class="btn btn-primary w-full justify-center">Register</button>
+          <button @click="handleRegistration" class="btn btn-primary w-full justify-center">등록하기</button>
         </div>
       </div>
     </div>
@@ -111,11 +107,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
 import Swal from 'sweetalert2'
 import { db } from '../firebase'
 import { collection, getDocs, addDoc, query, orderBy } from 'firebase/firestore'
 
 const router = useRouter()
+const props = defineProps({
+  handleLock: Function
+})
 
 const kstTime = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 const currentDate = ref(dayjs())
@@ -154,7 +154,7 @@ onMounted(() => {
   return () => clearInterval(interval)
 })
 
-const currentMonthName = computed(() => currentDate.value.format('MMMM YYYY'))
+const currentMonthName = computed(() => currentDate.value.locale('ko').format('YYYY년 M월'))
 const daysInMonth = computed(() => currentDate.value.daysInMonth())
 const firstDayOfMonth = computed(() => currentDate.value.startOf('month').day())
 const emptyDays = computed(() => Array.from({ length: firstDayOfMonth.value }, (_, i) => i))
@@ -272,6 +272,7 @@ const totalExpense = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+  padding-right: 0;
 }
 
 .date-info {
@@ -282,13 +283,17 @@ const totalExpense = computed(() => {
 .stats-row {
   display: flex;
   gap: 20px;
+  align-items: center;
+  width: 100%;
 }
 
 .stat-card {
   padding: 15px 25px;
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  flex: 1;
+  min-height: 75px;
+  justify-content: center;
 }
 
 .stat-card .label {
@@ -426,9 +431,16 @@ const totalExpense = computed(() => {
 
 .day-data {
   margin-top: 10px;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 4px;
+}
+
+.day-data-total {
+  margin-top: 10px;
+  display: flex;
+  font-size: 0.75rem;
+  padding: 3px 6px;
 }
 
 .tiny-plus {
@@ -453,21 +465,32 @@ const totalExpense = computed(() => {
 
 .quick-add {
   padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .quick-add h3 {
   margin-bottom: 20px;
+  align-self: flex-start;
+  width: 100%;
 }
 
 .form-group {
   margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .form-group label {
   display: block;
   font-size: 0.8rem;
   color: var(--text-muted);
-  margin-bottom: 5px;
+  margin-bottom: 0;
+  align-self: flex-start;
 }
 
 .w-full { width: 100%; }
@@ -496,9 +519,6 @@ const totalExpense = computed(() => {
 }
 
 @media (max-width: 480px) {
-  .stats-row {
-    flex-direction: column;
-  }
   .calendar-section {
     padding: 15px;
   }
@@ -529,12 +549,10 @@ const totalExpense = computed(() => {
   .date-info {
     font-size: 0.7rem;
   }
-  .stats-row {
-    flex-direction: column;
-    gap: 10px;
-  }
   .stat-card {
     padding: 10px 15px;
+    flex: 1;
+    min-height: auto;
   }
   .stat-card .label {
     font-size: 0.7rem;
@@ -587,18 +605,19 @@ const totalExpense = computed(() => {
   }
   .quick-add {
     padding: 15px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 12px;
   }
   .quick-add h3 {
     font-size: 0.95rem;
-    margin-bottom: 12px;
-    grid-column: 1 / -1;
+    margin-bottom: 0;
+    width: 100%;
   }
   .quick-add .form-group:nth-of-type(2),
   .quick-add .form-group:nth-of-type(4) {
-    grid-column: 1 / -1;
+    width: 100%;
   }
   .form-group {
     margin-bottom: 0;

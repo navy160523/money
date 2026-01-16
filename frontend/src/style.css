@@ -90,6 +90,7 @@ body {
   border-radius: 12px;
   color: var(--text-main);
   width: 100%;
+  max-width: 300px;
   outline: none;
   transition: border-color 0.3s ease;
   color-scheme: dark;
