@@ -212,6 +212,20 @@ const handleLock = () => {
   }
 }
 
+/* Breakpoint 4: 412px (Small phones like Galaxy S22) */
+@media (max-width: 412px) {
+  .mobile-header {
+    height: 60px;
+    padding: 0 15px;
+  }
+  .main-content {
+    padding: 75px 12px 12px 12px;
+  }
+  .logo-text {
+    font-size: 1.2rem;
+  }
+}
+
 /* Existing styles preserved */
 .sidebar-top {
   display: flex;

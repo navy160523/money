@@ -112,14 +112,14 @@ import { collection, getDocs, addDoc, query, orderBy } from 'firebase/firestore'
 
 const router = useRouter()
 
-const kstTime = computed(() => dayjs().format('YYYY-MM-DD HH:mm:ss'))
+const kstTime = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 const currentDate = ref(dayjs())
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const quickForm = ref({
   type: 'plus',
   amount: 0,
-  category: 'C',
+  category: 'S',
   date: dayjs().format('YYYY-MM-DD')
 })
 
@@ -139,7 +139,15 @@ const fetchTransactions = async () => {
   }
 }
 
-onMounted(fetchTransactions)
+onMounted(() => {
+  fetchTransactions()
+  // Update time every second
+  const interval = setInterval(() => {
+    kstTime.value = dayjs().format('YYYY-MM-DD HH:mm:ss')
+  }, 1000)
+  // Cleanup interval on unmount
+  return () => clearInterval(interval)
+})
 
 const currentMonthName = computed(() => currentDate.value.format('MMMM YYYY'))
 const daysInMonth = computed(() => currentDate.value.daysInMonth())
@@ -239,7 +247,7 @@ const totalExpense = computed(() => {
 })
 </script>
 
-<style scoped>
+<style>
 .dashboard-view {
   max-width: 1200px;
   margin: 0 auto;
@@ -308,29 +316,6 @@ const totalExpense = computed(() => {
   .stat-card {
     flex: 1;
     min-width: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-row {
-    flex-direction: column;
-  }
-  .calendar-section {
-    padding: 15px;
-  }
-  .day-cell {
-    min-height: 70px;
-    padding: 5px;
-  }
-  .day-number {
-    font-size: 0.8rem;
-  }
-  .day-data {
-    gap: 2px;
-  }
-  .tiny-plus, .tiny-minus {
-    font-size: 0.6rem;
-    padding: 1px 2px;
   }
 }
 
@@ -473,4 +458,154 @@ const totalExpense = computed(() => {
 
 .w-full { width: 100%; }
 .justify-center { justify-content: center; }
+
+/* Media Queries - must come AFTER base styles */
+@media (max-width: 1080px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .view-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .stats-row {
+    width: 100%;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    flex-direction: column;
+  }
+  .calendar-section {
+    padding: 15px;
+  }
+  .day-cell {
+    min-height: 70px;
+    padding: 5px;
+  }
+  .day-number {
+    font-size: 0.8rem;
+  }
+  .day-data {
+    gap: 2px;
+  }
+  .tiny-plus, .tiny-minus {
+    font-size: 0.6rem;
+    padding: 1px 2px;
+  }
+}
+
+/* Fit calendar for small phones (<= 412px) */
+@media (max-width: 412px) {
+  .view-header {
+    margin-bottom: 20px;
+  }
+  .view-header h1 {
+    font-size: 1.3rem;
+  }
+  .date-info {
+    font-size: 0.7rem;
+  }
+  .stats-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 10px 15px;
+  }
+  .stat-card .label {
+    font-size: 0.7rem;
+  }
+  .stat-card .value {
+    font-size: 1.1rem;
+  }
+  .content-grid {
+    gap: 15px;
+  }
+  .calendar-section {
+    padding: 8px;
+  }
+  .calendar-header {
+    margin-bottom: 15px;
+  }
+  .calendar-header h2 {
+    font-size: 1rem;
+  }
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5px;
+    width: 100%;
+  }
+  .day-name {
+    padding: 6px 2px;
+    font-size: 0.65rem;
+  }
+  .day-cell {
+    min-height: 50px;
+    padding: 4px;
+  }
+  .day-number {
+    font-size: 0.72rem;
+  }
+  .day-data {
+    margin-top: 4px;
+    gap: 2px;
+  }
+  .tiny-plus, .tiny-minus {
+    font-size: 0.62rem;
+    padding: 2px 3px;
+  }
+  .quick-add {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .quick-add h3 {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    grid-column: 1 / -1;
+  }
+  .quick-add .form-group:nth-of-type(2),
+  .quick-add .form-group:nth-of-type(4) {
+    grid-column: 1 / -1;
+  }
+  .form-group {
+    margin-bottom: 0;
+  }
+  .form-group label {
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+    text-align: left;
+  }
+  .input-field {
+    padding: 14px 12px;
+    font-size: 0.95rem;
+  }
+  .radio-group {
+    gap: 20px;
+    padding: 12px 8px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .radio-chip {
+    padding: 12px 18px;
+    font-size: 0.85rem;
+    min-width: 90px;
+  }
+  .btn {
+    padding: 16px 24px;
+    font-size: 1rem;
+  }
+}
 </style>
