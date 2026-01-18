@@ -10,6 +10,10 @@
           <span class="label">- Expense</span>
           <span class="value text-accent">-{{ formatMoney(totalExpense) }}</span>
         </div>
+        <div class="stat-card glass-card">
+          <span class="label">Sum</span>
+          <span class="value text-primary">+{{ formatMoney(totalIncome-totalExpense) }}</span>
+        </div>
       </div>
     </header>
 
