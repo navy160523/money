@@ -349,17 +349,28 @@ const totalSumYear = computed(() => {
 }
 
 @media (max-width: 720px) {
-  .view-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
   .stats-row {
     width: 100%;
+    flex-direction: column;   /* ✅ 1열로 */
+    gap: 12px;
   }
+
   .stat-card {
-    flex: 1;
-    min-width: 0;
+    width: 100%;              /* ✅ 카드가 가로 꽉 차게 */
+    min-width: 0;             /* ✅ 말줄임/overflow 동작 필수 */
+  }
+
+  .stat-card .value {
+    font-size: 1.2rem;        /* ✅ 모바일에서 적당히 */
+    line-height: 1.2;
+    white-space: nowrap;      /* ✅ 한 줄 유지 */
+    overflow: hidden;         /* ✅ 넘치면 숨김 */
+    text-overflow: ellipsis;  /* ✅ ... 처리 */
+    max-width: 100%;          /* ✅ 부모폭 기준 */
+  }
+
+  .stat-card .label {
+    font-size: 0.75rem;
   }
 }
 
