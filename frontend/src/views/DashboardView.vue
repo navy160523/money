@@ -270,13 +270,13 @@ const totalExpense = computed(() => {
 
 const totalIncomeYear = computed(() => {
   return transactions.value
-    .filter(t => t.type === 'plus' && dayjs(t.date).isSame(dayjs(), 'year'))
+    .filter(t => t.type === 'plus' && dayjs(t.date).isSame(currentDate.value, 'year'))
     .reduce((sum, t) => sum + (Number(t.amountValue) || 0), 0)
 })
 
 const totalExpenseYear = computed(() => {
   return transactions.value
-    .filter(t => t.type === 'minus' && dayjs(t.date).isSame(dayjs(), 'year'))
+    .filter(t => t.type === 'minus' && dayjs(t.date).isSame(currentDate.value, 'year'))
     .reduce((sum, t) => sum + (Number(t.amountValue) || 0), 0)
 })
 
