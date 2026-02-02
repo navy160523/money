@@ -26,6 +26,18 @@ const routes = [
         name: 'daily-detail',
         component: () => import('../views/DailyDetailView.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/fcm',
+        name: 'fcm',
+        component: () => import('../views/FcmView.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/analytics',
+        name: 'analytics',
+        component: () => import('../views/AnalyticsView.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 

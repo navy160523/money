@@ -12,7 +12,11 @@
         </div>
         <div class="stat-card glass-card">
           <span class="label">Sum</span>
-          <span class="value text-primary">+{{ formatMoney(totalIncome-totalExpense) }}</span>
+          <span class="value text-primary">{{ formatMoney(totalIncome-totalExpense) }}</span>
+        </div>
+        <div class="stat-card glass-card">
+          <span class="label">Year</span>
+          <span class="value text-primary">{{ formatMoney(totalIncomeYear-totalExpenseYear) }}</span>
         </div>
       </div>
     </header>
@@ -263,6 +267,23 @@ const totalExpense = computed(() => {
     .filter(t => t.type === 'minus' && dayjs(t.date).isSame(currentDate.value, 'month'))
     .reduce((sum, t) => sum + (Number(t.amountValue) || 0), 0)
 })
+
+const totalIncomeYear = computed(() => {
+  return transactions.value
+    .filter(t => t.type === 'plus' && dayjs(t.date).isSame(dayjs(), 'year'))
+    .reduce((sum, t) => sum + (Number(t.amountValue) || 0), 0)
+})
+
+const totalExpenseYear = computed(() => {
+  return transactions.value
+    .filter(t => t.type === 'minus' && dayjs(t.date).isSame(dayjs(), 'year'))
+    .reduce((sum, t) => sum + (Number(t.amountValue) || 0), 0)
+})
+
+const totalSumYear = computed(() => {
+  return totalIncomeYear.value - totalExpenseYear.value
+})
+
 </script>
 
 <style>

@@ -1,0 +1,2 @@
+C:\Program Files\Common Files\Oracle\Java\javapath\javac.exe
+C:\han\tools\java-1.8.0-openjdk-1.8.0.212-1\bin\javac.exe

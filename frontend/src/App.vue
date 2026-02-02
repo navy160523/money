@@ -39,6 +39,12 @@
         <router-link to="/transactions" class="menu-item" active-class="active" @click="isMobileMenuOpen = false">
           📜 Transactions
         </router-link>
+        <router-link to="/fcm" class="menu-item" active-class="active" @click="isMobileMenuOpen = false">
+          📣 FCM
+        </router-link>
+        <router-link to="/analytics" class="menu-item" active-class="active" @click="isMobileMenuOpen = false">
+          📊 Analytics
+        </router-link>
       </div>
       <button @click="handleLock" class="btn-lock" title="Lock">
         🔒 Lock
