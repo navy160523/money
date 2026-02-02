@@ -533,6 +533,7 @@ const totalSumYear = computed(() => {
 .justify-center { justify-content: center; }
 
 /* Media Queries - must come AFTER base styles */
+/*
 @media (max-width: 1080px) {
   .content-grid {
     grid-template-columns: 1fr;
@@ -553,6 +554,7 @@ const totalSumYear = computed(() => {
     min-width: 0;
   }
 }
+  */
 
 @media (max-width: 480px) {
   .calendar-section {
